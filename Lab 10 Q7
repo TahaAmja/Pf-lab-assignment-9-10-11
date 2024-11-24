@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+#define METERS_TO_KILOMETERS 0.001
+
+void convertMetersToKilometers(double meters) {
+    static int callCount = 0;
+    callCount++;
+    printf("\nCall #%d: %.2f meters = %.2f kilometers\n", callCount, meters, meters * METERS_TO_KILOMETERS);
+}
+
+int main() {
+    double meters;
+    for (int i = 0; i < 3; i++) {
+        printf("Enter distance in meters: ");
+        scanf("%lf", &meters);
+        convertMetersToKilometers(meters);
+    }
+    return 0;
+}
