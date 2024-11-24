@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    char name[50];
+    int id;
+    float salary;
+} Employee;
+
+void writeRecordsToFile(const char *filename) {
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        perror("Error opening file for writing");
+        return;
+    }
+
+    Employee employees[] = {
+        {"Alice", 101, 5000.50},
+        {"Bob", 102, 4500.75},
+        {"Charlie", 103, 4800.00}
+    };
+
+    fwrite(employees, sizeof(Employee), 3, file);
+    fclose(file);
+}
+
+void readRecordsAndCalculateTotalSalary(const char *filename) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        perror("Error opening file for reading");
+        return;
+    }
+
+    Employee employee;
+    float totalSalary = 0;
+
+    while (fread(&employee, sizeof(Employee), 1, file)) {
+        totalSalary += employee.salary;
+    }
+
+    fclose(file);
+    printf("Total salary expense of the company: $%.2f\n", totalSalary);
+}
+
+int main() {
+    const char *filename = "employees.bin";
+    writeRecordsToFile(filename);
+    readRecordsAndCalculateTotalSalary(filename);
+    return 0;
+}
