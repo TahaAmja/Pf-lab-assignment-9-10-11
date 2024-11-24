@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_COURSES 5
+#define MAX_STUDENTS 10
+
+typedef struct {
+    char name[50];
+    char code[10];
+    char instructor[50];
+} Course;
+
+typedef struct {
+    char name[50];
+    int rollNo;
+    Course courses[MAX_COURSES];
+    int courseCount;
+} Student;
+
+void saveStudentDataToFile(const char *filename, Student students[], int studentCount) {
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        perror("Error opening file");
+        return;
+    }
+    fwrite(students, sizeof(Student), studentCount, file);
+    fclose(file);
+}
+
+void displayCourses(Student student) {
+    printf("Courses for %s (Roll No: %d):\n", student.name, student.rollNo);
+    for (int i = 0; i < student.courseCount; i++) {
+        printf("%d. %s (%s) - Instructor: %s\n", i + 1, student.courses[i].name,
+               student.courses[i].code, student.courses[i].instructor);
+    }
+}
+
+int main() {
+    Student students[MAX_STUDENTS];
+    int studentCount = 2;
+
+    Course courses[] = {
+        {"Math", "M101", "Dr. Smith"},
+        {"Physics", "P102", "Dr. Brown"},
+        {"Chemistry", "C103", "Dr. Taylor"}
+    };
+
+    students[0] = (Student){"Alice", 1, {courses[0], courses[1]}, 2};
+    students[1] = (Student){"Bob", 2, {courses[1], courses[2]}, 2};
+
+    saveStudentDataToFile("students.bin", students, studentCount);
+
+    for (int i = 0; i < studentCount; i++) {
+        displayCourses(students[i]);
+    }
+
+    return 0;
+}
