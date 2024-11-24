@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+#define MAX_EMPLOYEES 10
+
+typedef struct {
+    char name[50];
+    int id;
+    float salary;
+} Employee;
+
+typedef struct {
+    char name[50];
+    Employee employees[MAX_EMPLOYEES];
+    int empCount;
+} Department;
+
+float calculateTotalSalary(Department dept) {
+    float totalSalary = 0;
+    for (int i = 0; i < dept.empCount; i++) {
+        totalSalary += dept.employees[i].salary;
+    }
+    return totalSalary;
+}
+
+int main() {
+    Department dept = {"IT Department"};
+    dept.empCount = 3;
+    dept.employees[0] = (Employee){"Alice", 101, 5000.50};
+    dept.employees[1] = (Employee){"Bob", 102, 4500.75};
+    dept.employees[2] = (Employee){"Charlie", 103, 4800.00};
+
+    printf("Total salary expense for %s: $%.2f\n", dept.name, calculateTotalSalary(dept));
+    return 0;
+}
