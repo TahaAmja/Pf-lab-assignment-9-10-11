@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+int ROWS=5, LENGHT=20;
+    char words[ROWS][LENGTH];
+    int Palindrome;
+
+    printf("Enter %d words (max %d characters each):\n", ROWS, MAX_LENGTH - 1);
+    for (int i = 0; i < ROWS; i++) {
+        scanf("%s", words[i]);
+    }
+if(ROWS<=5 && LENGTH>=20)//if1 open
+
+   { for (int i = 0; i < ROWS; i++) {
+        int len = strlen(words[i]);
+        Palindrome = 1;
+
+        for (int j = 0; j < len / 2; j++) {
+            if (words[i][j] != words[i][len - j - 1]) {
+                isPalindrome = 0;
+                break;
+            }
+        }
+
+        if (Palindrome) {//if2 open
+            printf("Palindrome\n");
+        } else {
+            printf("Not Palindrome\n");
+        }//if2 close
+    }
+else
+{
+printf("Invalid Input");
+}//if1 close
+
+    return 0;
+}
