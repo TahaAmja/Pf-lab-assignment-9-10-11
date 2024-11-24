@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_PACKAGES 5
+
+typedef struct {
+    char name[50];
+    char destination[50];
+    int duration;   // in days
+    float cost;     // in USD
+    int seats;      // available seats
+} TravelPackage;
+
+void displayPackages(TravelPackage packages[], int count) {
+    printf("\nAvailable Travel Packages:\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d. %s to %s - Duration: %d days, Cost: $%.2f, Seats: %d\n",
+               i + 1, packages[i].name, packages[i].destination,
+               packages[i].duration, packages[i].cost, packages[i].seats);
+    }
+}
+
+void bookPackage(TravelPackage packages[], int index) {
+    if (packages[index].seats > 0) {
+        packages[index].seats--;
+        printf("\nBooking successful for %s!\n", packages[index].name);
+    } else {
+        printf("\nSorry, no seats available for %s.\n", packages[index].name);
+    }
+}
+
+int main() {
+    TravelPackage packages[MAX_PACKAGES] = {
+        {"Beach Paradise", "Maldives", 7, 1200.0, 10},
+        {"Mountain Adventure", "Nepal", 5, 800.0, 5},
+        {"City Lights", "Paris", 4, 1500.0, 8},
+        {"Wild Safari", "Kenya", 6, 1300.0, 2},
+        {"Cruise Voyage", "Caribbean", 10, 2500.0, 4}
+    };
+
+    int choice;
+    displayPackages(packages, MAX_PACKAGES);
+
+    printf("\nEnter the package number to book (1-%d): ", MAX_PACKAGES);
+    scanf("%d", &choice);
+
+    if (choice >= 1 && choice <= MAX_PACKAGES) {
+        bookPackage(packages, choice - 1);
+    } else {
+        printf("\nInvalid choice.\n");
+    }
+
+    displayPackages(packages, MAX_PACKAGES);
+    return 0;
+}
