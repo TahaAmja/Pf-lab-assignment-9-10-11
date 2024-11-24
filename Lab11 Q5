@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_PASSENGERS 1000
+
+typedef struct {
+    int id;
+    int pclass;
+    char name[100];
+    char sex[10];
+    float age;
+    int survived;
+    char cabin[20];
+} Passenger;
+
+void loadDataset(const char *filename, Passenger passengers[], int *count) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        perror("Error opening file");
+        return;
+    }
+
+    char line[256];
+    *count = 0;
+
+    // Skip header
+    fgets(line, sizeof(line), file);
+
+    while (fgets(line, sizeof(line), file) && *count < MAX_PASSENGERS) {
+        Passenger *p = &passengers[*count];
+        sscanf(line, "%d,%d,%[^,],%[^,],%f,%d,%s",
+               &p->id, &p->pclass, p->name, p->sex, &p->age, &p->survived, p->cabin);
+        (*count)++;
+    }
+
+    fclose(file);
+}
+
+float calculateAverageAge(Passenger passengers[], int count) {
+    float totalAge = 0;
+    int validAgeCount = 0;
+
+    for (int i = 0; i < count; i++) {
+        if (passengers[i].age > 0) {
+            totalAge += passengers[i].age;
+            validAgeCount++;
+        }
+    }
+    return validAgeCount > 0 ? totalAge / validAgeCount : 0;
+}
+
+void displaySurvivors(Passenger passengers[], int count) {
+    printf("\nSurvivors:\n");
+    for (int i = 0; i < count; i++) {
+        if (passengers[i].survived) {
+            printf("%s (Age: %.2f, Class: %d)\n", passengers[i].name, passengers[i].age, passengers[i].pclass);
+        }
+    }
+}
+
+void displayMissingCabinDetails(Passenger passengers[], int count) {
+    printf("\nPassengers with missing cabin details:\n");
+    for (int i = 0; i < count; i++) {
+        if (strcmp(passengers[i].cabin, "NA") == 0) {
+            printf("%s\n", passengers[i].name);
+        }
+    }
+}
+
+int main() {
+    Passenger passengers[MAX_PASSENGERS];
+    int count;
+
+    loadDataset("titanic.csv", passengers, &count);
+    printf("Average Age: %.2f\n", calculateAverageAge(passengers, count));
+    displaySurvivors(passengers, count);
+    displayMissingCabinDetails(passengers, count);
+
+    return 0;
+}
