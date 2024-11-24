@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char make[50];
+    char model[50];
+    int year;
+    float price;
+    float mileage;
+} Car;
+
+void addCar(Car cars[], int *count) {
+    printf("Enter make: ");
+    scanf("%s", cars[*count].make);
+    printf("Enter model: ");
+    scanf("%s", cars[*count].model);
+    printf("Enter year: ");
+    scanf("%d", &cars[*count].year);
+    printf("Enter price: ");
+    scanf("%f", &cars[*count].price);
+    printf("Enter mileage: ");
+    scanf("%f", &cars[*count].mileage);
+    (*count)++;
+}
+
+void displayCars(Car cars[], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("Car %d: %s %s, Year: %d, Price: %.2f, Mileage: %.2f\n", i + 1, cars[i].make, cars[i].model, cars[i].year, cars[i].price, cars[i].mileage);
+    }
+}
+
+void searchCar(Car cars[], int count, char *query) {
+    for (int i = 0; i < count; i++) {
+        if (strstr(cars[i].make, query) || strstr(cars[i].model, query)) {
+            printf("Found: %s %s, Year: %d, Price: %.2f, Mileage: %.2f\n", cars[i].make, cars[i].model, cars[i].year, cars[i].price, cars[i].mileage);
+        }
+    }
+}
+
+int main() {
+    Car cars[100];
+    int count = 0;
+    int choice;
+    char query[50];
+
+    do {
+        printf("\n1. Add Car\n2. Display Cars\n3. Search Car\n4. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addCar(cars, &count);
+                break;
+            case 2:
+                displayCars(cars, count);
+                break;
+            case 3:
+                printf("Enter make or model to search: ");
+                scanf("%s", query);
+                searchCar(cars, count, query);
+                break;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
